@@ -407,8 +407,9 @@ This project is open source and available under the MIT License.
 
 ## 💬 Support
 
-For support, email support@studentsync.com or open an issue on GitHub.
+If you encounter any issues or have questions, please [open an issue](https://github.com/CodeWithAmrat/StudentSync/issues) on this repository.
 
+For bug reports and feature requests, you can also use the built-in feedback form directly within the StudentSync application!
 For bug reports and feature requests, use the feedback form in the StudentSync application!
 
 ---
