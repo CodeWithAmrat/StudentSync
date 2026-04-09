@@ -10,7 +10,11 @@ const PORT = process.env.PORT || 5000;
 const feedbackRoutes = require('./routes/feedbackRoutes');
 
 // Middleware
-app.use(cors());
+// 🚀 DEPLOYMENT UPDATE: Configured CORS for Vercel
+app.use(cors({
+  origin: 'https://studentsync-plum.vercel.app/', // Put YOUR exact Vercel link here
+  credentials: true
+}));
 app.use(express.json());
 
 // MongoDB Connection
