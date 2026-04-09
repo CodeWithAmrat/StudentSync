@@ -424,5 +424,3 @@ For bug reports and feature requests, use the feedback form in the StudentSync a
 ---
 
 **Made with ❤️ by Amrat**
-
-Last Updated: April 9, 2026
