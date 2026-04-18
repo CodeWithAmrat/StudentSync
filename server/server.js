@@ -11,10 +11,11 @@ const feedbackRoutes = require('./routes/feedbackRoutes');
 
 // Middleware
 // 🚀 DEPLOYMENT UPDATE: Configured CORS for Vercel
+// Middleware
 app.use(cors({
   origin: [
-    'https://studentsync-plum.vercel.app', // Your live Vercel website
-    'http://localhost:5173'                // Your local computer
+    'https://studentsync-plum.vercel.app', 
+    'http://localhost:5173'
   ],
   credentials: true
 }));
