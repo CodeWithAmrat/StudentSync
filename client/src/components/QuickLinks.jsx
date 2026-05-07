@@ -1,72 +1,97 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+
 export default function QuickLinks() {
   const links = [
     {
-      id: 1,
       title: 'VTOP Portal',
-      description: 'Access your academic information and grades',
+      description: 'Official Student Portal for Grades & Attendance',
       url: 'https://vtop.vitbhopal.ac.in/vtop/open/page',
       icon: '🎓',
+      bgStyle: 'bg-blue-50 hover:bg-blue-100 border-blue-200',
+      textStyle: 'text-blue-700',
+      isInternalPage: false
     },
     {
-      id: 2,
-      title: 'Library',
-      description: 'Access library resources and books',
-      url: '#library',
+      title: 'Faculty & Library',
+      description: 'Search faculty cabins and contacts',
+      url: '/directory',
       icon: '📚',
+      bgStyle: 'bg-emerald-50 hover:bg-emerald-100 border-emerald-200',
+      textStyle: 'text-emerald-700',
+      isInternalPage: true
     },
     {
-      id: 3,
-      title: 'Student Dashboard',
-      description: 'View your upcoming classes and assignments',
-      url: '#dashboard',
-      icon: '📊',
+      title: 'SGPA Calculator',
+      description: 'Calculate your semester GPA instantly',
+      url: '/sgpa-calculator',
+      icon: '🧮',
+      bgStyle: 'bg-orange-50 hover:bg-orange-100 border-orange-200',
+      textStyle: 'text-orange-700',
+      isInternalPage: true
     },
     {
-      id: 4,
+      title: 'GPA Target Planner',
+      description: 'Plan your required SGPA for your target CGPA',
+      url: '/gpa-improver',
+      icon: '📈',
+      bgStyle: 'bg-indigo-50 hover:bg-indigo-100 border-indigo-200',
+      textStyle: 'text-indigo-700',
+      isInternalPage: true
+    },
+    {
       title: 'Feedback',
       description: 'Share your feedback and suggestions',
-      url: '#feedback',
+      url: '/#feedback-section',
       icon: '💬',
-    },
+      bgStyle: 'bg-purple-50 hover:bg-purple-100 border-purple-200',
+      textStyle: 'text-purple-700',
+      isInternalPage: false
+    }
   ];
 
   return (
-    <section className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">
-          Quick Links
-        </h2>
-        <p className="text-gray-600 text-center mb-12">
-          Access important resources at a glance
-        </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {links.map((link) => (
-            <a
-              key={link.id}
-              href={link.url}
-              target={link.url.startsWith('http') ? '_blank' : '_self'}
-              rel={link.url.startsWith('http') ? 'noopener noreferrer' : ''}
-              className="group"
-            >
-              <div className="bg-white rounded-lg shadow-md p-6 h-full transform transition-all duration-300 hover:shadow-xl hover:scale-105 hover:-translate-y-2 cursor-pointer">
-                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {link.icon}
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                  {link.title}
-                </h3>
-                <p className="text-gray-600 text-sm group-hover:text-gray-800 transition-colors">
-                  {link.description}
-                </p>
-                <div className="mt-4 text-blue-600 font-medium text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  Learn More →
-                </div>
-              </div>
-            </a>
-          ))}
-        </div>
+    <div className="max-w-6xl mx-auto p-6 mt-4">
+      <div className="mb-8 text-center md:text-left">
+        <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight">🚀 Quick Links</h2>
+        <p className="text-slate-600 mt-3 font-medium">Access your essential university tools and resources in one click.</p>
       </div>
-    </section>
+
+      {/* Grid updated to handle 5 cards nicely */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {links.map((link, index) => {
+          
+          const cardDesign = (
+            <>
+              <div className="text-5xl mb-4 drop-shadow-sm">{link.icon}</div>
+              <h3 className={`font-bold text-xl mb-2 ${link.textStyle}`}>{link.title}</h3>
+              <p className="text-sm text-center text-slate-600 font-medium leading-relaxed">{link.description}</p>
+            </>
+          );
+
+          const cardClasses = `flex flex-col items-center p-8 rounded-3xl border transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl ${link.bgStyle} cursor-pointer`;
+
+          if (link.isInternalPage) {
+            return (
+              <Link key={index} to={link.url} className={cardClasses}>
+                {cardDesign}
+              </Link>
+            );
+          }
+
+          return (
+            <a
+              key={index}
+              href={link.url}
+              target={link.url.startsWith('http') ? "_blank" : "_self"}
+              rel="noopener noreferrer"
+              className={cardClasses}
+            >
+              {cardDesign}
+            </a>
+          );
+        })}
+      </div>
+    </div>
   );
 }

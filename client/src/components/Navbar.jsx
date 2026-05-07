@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,52 +9,44 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
+    <nav className="sticky top-0 z-50 backdrop-blur-lg bg-white/70 border-b border-white/50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div className="flex-shrink-0 font-bold text-2xl">
-            <a href="/" className="hover:text-blue-200 transition">
+          
+          {/* Gradient Logo */}
+          <div className="flex-shrink-0 font-extrabold text-2xl tracking-tight">
+            <Link to="/" className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-80 transition">
               StudentSync
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:items-center md:space-x-8">
-            <a
-              href="/"
-              className="hover:text-blue-200 transition font-medium"
+            <Link
+              to="/"
+              className="text-slate-600 hover:text-blue-600 transition font-medium"
             >
               Home
-            </a>
-            <a
-              href="#about"
-              className="hover:text-blue-200 transition font-medium"
+            </Link>
+            <Link
+              to="/directory"
+              className="text-slate-600 hover:text-blue-600 transition font-medium"
             >
-              About
-            </a>
+              Directory
+            </Link>
             <a
-              href="#features"
-              className="hover:text-blue-200 transition font-medium"
-            >
-              Features
-            </a>
-            <a
-              href="#contact"
-              className="hover:text-blue-200 transition font-medium"
+              href="/#feedback-section"
+              className="text-slate-600 hover:text-blue-600 transition font-medium"
             >
               Contact
             </a>
-            <button className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition">
-              Sign In
-            </button>
           </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button
-              onClick={toggleMenu}
-              className="text-white hover:text-blue-200 focus:outline-none transition"
+               onClick={toggleMenu}
+               className="text-slate-600 hover:text-blue-600 focus:outline-none transition"
             >
               <svg
                 className="h-6 w-6"
@@ -82,37 +75,31 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Mobile Navigation (Frosted Glass Menu) */}
       {isOpen && (
-        <div className="md:hidden bg-blue-700">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            <a
-              href="/"
-              className="block px-3 py-2 rounded-md hover:bg-blue-600 transition font-medium"
+        <div className="md:hidden bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-lg absolute w-full">
+          <div className="px-4 pt-2 pb-6 space-y-2">
+            <Link
+              to="/"
+              onClick={toggleMenu}
+              className="block px-3 py-3 rounded-lg text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition font-medium"
             >
               Home
-            </a>
-            <a
-              href="#about"
-              className="block px-3 py-2 rounded-md hover:bg-blue-600 transition font-medium"
+            </Link>
+            <Link
+              to="/directory"
+              onClick={toggleMenu}
+              className="block px-3 py-3 rounded-lg text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition font-medium"
             >
-              About
-            </a>
+              Directory
+            </Link>
             <a
-              href="#features"
-              className="block px-3 py-2 rounded-md hover:bg-blue-600 transition font-medium"
-            >
-              Features
-            </a>
-            <a
-              href="#contact"
-              className="block px-3 py-2 rounded-md hover:bg-blue-600 transition font-medium"
+              href="/#feedback-section"
+              onClick={toggleMenu}
+              className="block px-3 py-3 rounded-lg text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition font-medium"
             >
               Contact
             </a>
-            <button className="w-full text-left px-3 py-2 rounded-md bg-white text-blue-600 font-medium hover:bg-blue-50 transition">
-              Sign In
-            </button>
           </div>
         </div>
       )}

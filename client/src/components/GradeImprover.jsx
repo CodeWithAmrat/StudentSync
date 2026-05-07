@@ -9,17 +9,10 @@ export default function GradeImprover() {
   const [error, setError] = useState('');
 
   const calculateRequiredSGPA = () => {
-    // Reset previous results
     setResult(null);
     setError('');
 
-    // Validation
-    if (
-      !currentCGPA ||
-      !totalCreditsCompleted ||
-      !upcomingCredits ||
-      !targetCGPA
-    ) {
+    if (!currentCGPA || !totalCreditsCompleted || !upcomingCredits || !targetCGPA) {
       setError('Please fill in all fields');
       return;
     }
@@ -29,14 +22,10 @@ export default function GradeImprover() {
     const upcomingCreditsNum = parseFloat(upcomingCredits);
     const targetCGPANum = parseFloat(targetCGPA);
 
-    // Input validation
     if (
-      currentCGPANum < 0 ||
-      currentCGPANum > 10 ||
-      totalCreditsNum <= 0 ||
-      upcomingCreditsNum <= 0 ||
-      targetCGPANum < 0 ||
-      targetCGPANum > 10
+      currentCGPANum < 0 || currentCGPANum > 10 ||
+      totalCreditsNum <= 0 || upcomingCreditsNum <= 0 ||
+      targetCGPANum < 0 || targetCGPANum > 10
     ) {
       setError('Please enter valid values (CGPA: 0-10, Credits: > 0)');
       return;
@@ -46,14 +35,10 @@ export default function GradeImprover() {
       setResult({
         requiredSGPA: 0,
         isFeasible: true,
-        message: `Your target CGPA (${targetCGPANum}) is already below your current CGPA (${currentCGPANum}). Any positive SGPA will maintain or improve your CGPA.`,
+        message: `Your target CGPA (${targetCGPANum}) is already below your current CGPA (${currentCGPANum}). Any passing SGPA will maintain your goal.`,
       });
       return;
     }
-
-    // Formula: Target CGPA = (Current CGPA × Total Credits + Required SGPA × Upcoming Credits) / (Total Credits + Upcoming Credits)
-    // Solving for Required SGPA:
-    // Required SGPA = (Target CGPA × (Total Credits + Upcoming Credits) - Current CGPA × Total Credits) / Upcoming Credits
 
     const requiredSGPA =
       (targetCGPANum * (totalCreditsNum + upcomingCreditsNum) -
@@ -62,18 +47,17 @@ export default function GradeImprover() {
 
     const roundedSGPA = Math.round(requiredSGPA * 100) / 100;
 
-    // Check if SGPA is feasible
     if (roundedSGPA > 10) {
       setResult({
         requiredSGPA: roundedSGPA,
         isFeasible: false,
-        message: `An SGPA of ${roundedSGPA} is required, but the maximum possible SGPA is 10.0. Your target CGPA is not achievable with the given credits.`,
+        message: `An SGPA of ${roundedSGPA} is required, but the maximum possible SGPA is 10.0. Your target is mathematically out of reach for this semester.`,
       });
     } else if (roundedSGPA < 0) {
       setResult({
         requiredSGPA: 0,
         isFeasible: true,
-        message: `Your target CGPA is easily achievable. You can score 0 SGPA and still achieve a CGPA of at least ${targetCGPANum}.`,
+        message: `Your target CGPA is easily achievable! You need an SGPA greater than 0.`,
       });
     } else {
       setResult({
@@ -94,162 +78,115 @@ export default function GradeImprover() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 py-8 px-4">
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              GPA Improver
-            </h1>
-            <p className="text-gray-600">
-              Calculate the SGPA you need to achieve your target CGPA
-            </p>
-          </div>
+    <div className="max-w-2xl mx-auto px-6 mb-16">
+      <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-xl border border-white/50 p-8 sm:p-10">
+        
+        {/* Header */}
+        <div className="mb-10 text-center">
+          <h2 className="text-4xl font-extrabold tracking-tight text-slate-900 mb-3">
+            GPA Target Planner
+          </h2>
+          <p className="text-slate-600 font-medium">
+            Find out exactly what SGPA you need to hit your target CGPA.
+          </p>
+        </div>
 
-          {/* Input Section */}
-          <div className="space-y-6 mb-8">
-            {/* Current CGPA */}
+        {/* Input Section */}
+        <div className="space-y-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Current CGPA
-              </label>
+              <label className="block text-sm font-bold text-slate-700 mb-2">Current CGPA</label>
               <input
                 type="number"
                 value={currentCGPA}
                 onChange={(e) => setCurrentCGPA(e.target.value)}
                 placeholder="e.g., 7.5"
-                min="0"
-                max="10"
-                step="0.01"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                min="0" max="10" step="0.01"
+                className="w-full px-4 py-3 bg-white/80 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               />
-              <p className="text-xs text-gray-500 mt-1">Range: 0 - 10</p>
             </div>
-
-            {/* Total Credits Completed */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Total Credits Completed
-              </label>
-              <input
-                type="number"
-                value={totalCreditsCompleted}
-                onChange={(e) => setTotalCreditsCompleted(e.target.value)}
-                placeholder="e.g., 60"
-                min="0"
-                step="0.5"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Total credits you have completed so far
-              </p>
-            </div>
-
-            {/* Credits in Upcoming Semester */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Credits in Upcoming Semester
-              </label>
-              <input
-                type="number"
-                value={upcomingCredits}
-                onChange={(e) => setUpcomingCredits(e.target.value)}
-                placeholder="e.g., 20"
-                min="0"
-                step="0.5"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Credits you will take in the next semester
-              </p>
-            </div>
-
-            {/* Target CGPA */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Target CGPA
-              </label>
+              <label className="block text-sm font-bold text-slate-700 mb-2">Target CGPA</label>
               <input
                 type="number"
                 value={targetCGPA}
                 onChange={(e) => setTargetCGPA(e.target.value)}
                 placeholder="e.g., 8.0"
-                min="0"
-                max="10"
-                step="0.01"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                min="0" max="10" step="0.01"
+                className="w-full px-4 py-3 bg-white/80 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               />
-              <p className="text-xs text-gray-500 mt-1">
-                Your desired CGPA (Range: 0 - 10)
-              </p>
             </div>
           </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
-              <p className="text-red-700 font-medium">{error}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-bold text-slate-700 mb-2">Current Credits</label>
+              <input
+                type="number"
+                value={totalCreditsCompleted}
+                onChange={(e) => setTotalCreditsCompleted(e.target.value)}
+                placeholder="e.g., 60"
+                min="0" step="0.5"
+                className="w-full px-4 py-3 bg-white/80 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              />
             </div>
-          )}
-
-          {/* Buttons */}
-          <div className="flex gap-4 mb-8">
-            <button
-              onClick={calculateRequiredSGPA}
-              className="flex-1 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200 transform hover:scale-105"
-            >
-              Calculate Required SGPA
-            </button>
-            <button
-              onClick={handleReset}
-              className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-6 rounded-lg transition duration-200"
-            >
-              Reset
-            </button>
+            <div>
+              <label className="block text-sm font-bold text-slate-700 mb-2">Upcoming Credits</label>
+              <input
+                type="number"
+                value={upcomingCredits}
+                onChange={(e) => setUpcomingCredits(e.target.value)}
+                placeholder="e.g., 20"
+                min="0" step="0.5"
+                className="w-full px-4 py-3 bg-white/80 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              />
+            </div>
           </div>
-
-          {/* Result Section */}
-          {result && (
-            <div
-              className={`rounded-xl p-8 ${
-                result.isFeasible
-                  ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-400'
-                  : 'bg-gradient-to-r from-orange-50 to-red-50 border-2 border-orange-400'
-              }`}
-            >
-              <p className="text-gray-700 font-semibold mb-3">
-                {result.isFeasible ? '✓ Calculation Result' : '⚠ Warning'}
-              </p>
-
-              {/* Required SGPA Display */}
-              <div className="mb-6">
-                <p className="text-gray-700 text-sm mb-2">Required SGPA:</p>
-                <p
-                  className={`text-5xl font-bold ${
-                    result.isFeasible ? 'text-green-600' : 'text-orange-600'
-                  }`}
-                >
-                  {result.requiredSGPA}
-                </p>
-              </div>
-
-              {/* Message */}
-              <p className="text-gray-700 leading-relaxed">
-                {result.message}
-              </p>
-
-              {/* Additional Info */}
-              <div className="mt-6 pt-6 border-t border-gray-300">
-                <p className="text-sm text-gray-600">
-                  <span className="font-semibold">Formula Used:</span> Required
-                  SGPA = (Target CGPA × (Total Credits + Upcoming Credits) - Current
-                  CGPA × Total Credits) / Upcoming Credits
-                </p>
-              </div>
-            </div>
-          )}
         </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50/80 border border-red-200 text-red-600 px-4 py-3 rounded-xl mb-6 font-medium text-sm">
+            {error}
+          </div>
+        )}
+
+        {/* Buttons */}
+        <div className="flex gap-4 mb-8">
+          <button
+            onClick={calculateRequiredSGPA}
+            className="flex-1 bg-slate-900 hover:bg-blue-600 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-blue-500/30 transform hover:-translate-y-0.5"
+          >
+            Calculate Needed SGPA
+          </button>
+          <button
+            onClick={handleReset}
+            className="px-6 py-3.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold rounded-xl transition shadow-sm"
+          >
+            Reset
+          </button>
+        </div>
+
+        {/* Result Section */}
+        {result && (
+          <div
+            className={`rounded-2xl p-8 text-center animate-fade-in-up border ${
+              result.isFeasible
+                ? 'bg-gradient-to-br from-indigo-50 to-blue-50 border-blue-200'
+                : 'bg-gradient-to-br from-red-50 to-orange-50 border-orange-200'
+            }`}
+          >
+            <p className={`font-bold mb-2 uppercase tracking-wider text-sm ${result.isFeasible ? 'text-blue-800' : 'text-orange-800'}`}>
+              {result.isFeasible ? 'Target Required' : 'Not Feasible'}
+            </p>
+            <p className={`text-6xl font-extrabold tracking-tight mb-4 ${result.isFeasible ? 'text-blue-600' : 'text-orange-600'}`}>
+              {result.requiredSGPA}
+            </p>
+            <p className="text-slate-700 font-medium leading-relaxed">
+              {result.message}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
