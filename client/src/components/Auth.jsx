@@ -45,9 +45,9 @@ export default function Auth() {
         </button>
 
         <div className="relative flex items-center py-2 mb-6">
-          <div className="flex-grow border-t border-slate-200"></div>
-          <span className="flex-shrink-0 mx-4 text-slate-400 text-sm font-medium">Or continue with email</span>
-          <div className="flex-grow border-t border-slate-200"></div>
+          <div className="grow border-t border-slate-200"></div>
+          <span className="shrink-0 mx-4 text-slate-400 text-sm font-medium">Or continue with email</span>
+          <div className="grow border-t border-slate-200"></div>
         </div>
 
         {/* Email/Password Form */}

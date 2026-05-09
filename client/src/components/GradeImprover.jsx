@@ -27,7 +27,7 @@ export default function GradeImprover() {
       totalCreditsNum <= 0 || upcomingCreditsNum <= 0 ||
       targetCGPANum < 0 || targetCGPANum > 10
     ) {
-      setError('Please enter valid values (CGPA: 0-10, Credits: > 0)');
+      setError('Please enter valid values (CGPA: 0–10, Credits: > 0)');
       return;
     }
 
@@ -51,7 +51,7 @@ export default function GradeImprover() {
       setResult({
         requiredSGPA: roundedSGPA,
         isFeasible: false,
-        message: `An SGPA of ${roundedSGPA} is required, but the maximum possible SGPA is 10.0. Your target is mathematically out of reach for this semester.`,
+        message: `An SGPA of ${roundedSGPA} is required, but the maximum possible is 10.0. Your target is mathematically out of reach this semester.`,
       });
     } else if (roundedSGPA < 0) {
       setResult({
@@ -77,112 +77,212 @@ export default function GradeImprover() {
     setError('');
   };
 
+  const fields = [
+    { label: 'Current CGPA', value: currentCGPA, setter: setCurrentCGPA, placeholder: 'e.g., 7.5', step: '0.01', max: '10' },
+    { label: 'Target CGPA',  value: targetCGPA,  setter: setTargetCGPA,  placeholder: 'e.g., 8.0', step: '0.01', max: '10' },
+    { label: 'Current Credits (completed)', value: totalCreditsCompleted, setter: setTotalCreditsCompleted, placeholder: 'e.g., 60', step: '0.5' },
+    { label: 'Upcoming Credits (this sem)', value: upcomingCredits, setter: setUpcomingCredits, placeholder: 'e.g., 20', step: '0.5' },
+  ];
+
   return (
-    <div className="max-w-2xl mx-auto px-6 mb-16">
-      <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-xl border border-white/50 p-8 sm:p-10">
-        
-        {/* Header */}
-        <div className="mb-10 text-center">
-          <h2 className="text-4xl font-extrabold tracking-tight text-slate-900 mb-3">
-            GPA Target Planner
-          </h2>
-          <p className="text-slate-600 font-medium">
-            Find out exactly what SGPA you need to hit your target CGPA.
-          </p>
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 mb-16 mt-8">
+
+      {/* Page label + title */}
+      <div className="mb-6">
+        <p style={{
+          fontSize: '0.72rem', color: '#a78bfa',
+          textTransform: 'uppercase', letterSpacing: '0.12em',
+          fontWeight: 500, marginBottom: '0.5rem',
+        }}>
+          ✦ Academic Planner
+        </p>
+        <h2 style={{
+          fontFamily: "'Syne', sans-serif",
+          fontSize: 'clamp(1.8rem, 4vw, 2.5rem)',
+          fontWeight: 800,
+          letterSpacing: '-0.025em',
+          lineHeight: 1.15,
+          color: '#f8f4ff',
+          marginBottom: '0.4rem',
+        }}>
+          GPA Target Planner
+        </h2>
+        <p style={{ color: '#6b5f87', fontSize: '0.9rem' }}>
+          Find out exactly what SGPA you need to hit your target CGPA.
+        </p>
+      </div>
+
+      {/* Main card */}
+      <div style={{
+        background: 'rgba(255,255,255,0.025)',
+        border: '1px solid rgba(139,92,246,0.15)',
+        borderRadius: '20px',
+        backdropFilter: 'blur(14px)',
+        padding: '2rem',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+
+        {/* Top shimmer */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
+          background: 'linear-gradient(90deg, transparent, rgba(167,139,250,0.5), rgba(236,72,153,0.3), transparent)',
+        }} />
+
+        {/* Input grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '1.5rem' }}>
+          {fields.map(({ label, value, setter, placeholder, step, max }) => (
+            <div key={label}>
+              <label style={{
+                display: 'block',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                color: '#a78bfa',
+                marginBottom: '0.5rem',
+                letterSpacing: '0.03em',
+              }}>
+                {label}
+              </label>
+              <input
+                type="number"
+                value={value}
+                onChange={(e) => setter(e.target.value)}
+                placeholder={placeholder}
+                min="0"
+                max={max}
+                step={step}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 1rem',
+                  borderRadius: '12px',
+                  fontSize: '0.95rem',
+                }}
+              />
+            </div>
+          ))}
         </div>
 
-        {/* Input Section */}
-        <div className="space-y-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-bold text-slate-700 mb-2">Current CGPA</label>
-              <input
-                type="number"
-                value={currentCGPA}
-                onChange={(e) => setCurrentCGPA(e.target.value)}
-                placeholder="e.g., 7.5"
-                min="0" max="10" step="0.01"
-                className="w-full px-4 py-3 bg-white/80 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-slate-700 mb-2">Target CGPA</label>
-              <input
-                type="number"
-                value={targetCGPA}
-                onChange={(e) => setTargetCGPA(e.target.value)}
-                placeholder="e.g., 8.0"
-                min="0" max="10" step="0.01"
-                className="w-full px-4 py-3 bg-white/80 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-bold text-slate-700 mb-2">Current Credits</label>
-              <input
-                type="number"
-                value={totalCreditsCompleted}
-                onChange={(e) => setTotalCreditsCompleted(e.target.value)}
-                placeholder="e.g., 60"
-                min="0" step="0.5"
-                className="w-full px-4 py-3 bg-white/80 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-slate-700 mb-2">Upcoming Credits</label>
-              <input
-                type="number"
-                value={upcomingCredits}
-                onChange={(e) => setUpcomingCredits(e.target.value)}
-                placeholder="e.g., 20"
-                min="0" step="0.5"
-                className="w-full px-4 py-3 bg-white/80 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Error Message */}
+        {/* Error */}
         {error && (
-          <div className="bg-red-50/80 border border-red-200 text-red-600 px-4 py-3 rounded-xl mb-6 font-medium text-sm">
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'rgba(239,68,68,0.1)',
+            border: '1px solid rgba(239,68,68,0.25)',
+            color: '#fca5a5',
+            padding: '0.75rem 1rem',
+            borderRadius: '12px',
+            marginBottom: '1.25rem',
+            fontSize: '0.85rem',
+            fontWeight: 500,
+          }}>
+            <span style={{ fontSize: '1rem' }}>⚠️</span>
             {error}
           </div>
         )}
 
         {/* Buttons */}
-        <div className="flex gap-4 mb-8">
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
           <button
             onClick={calculateRequiredSGPA}
-            className="flex-1 bg-slate-900 hover:bg-blue-600 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-blue-500/30 transform hover:-translate-y-0.5"
+            style={{
+              flex: 1,
+              padding: '0.85rem 1.5rem',
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, #7c3aed, #db2777)',
+              color: 'white',
+              fontWeight: 700,
+              fontSize: '0.95rem',
+              border: 'none',
+              cursor: 'pointer',
+              boxShadow: '0 0 24px rgba(139,92,246,0.3)',
+              transition: 'opacity 0.2s, transform 0.15s',
+              letterSpacing: '0.01em',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.opacity = '0.88'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+            onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'translateY(0)'; }}
           >
             Calculate Needed SGPA
           </button>
           <button
             onClick={handleReset}
-            className="px-6 py-3.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold rounded-xl transition shadow-sm"
+            style={{
+              padding: '0.85rem 1.25rem',
+              borderRadius: '12px',
+              background: 'rgba(255,255,255,0.04)',
+              color: '#9d8fbb',
+              fontWeight: 600,
+              fontSize: '0.9rem',
+              border: '1px solid rgba(139,92,246,0.2)',
+              cursor: 'pointer',
+              transition: 'background 0.2s, color 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(139,92,246,0.1)'; e.currentTarget.style.color = '#c4b5fd'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = '#9d8fbb'; }}
           >
             Reset
           </button>
         </div>
 
-        {/* Result Section */}
+        {/* Result */}
         {result && (
-          <div
-            className={`rounded-2xl p-8 text-center animate-fade-in-up border ${
-              result.isFeasible
-                ? 'bg-gradient-to-br from-indigo-50 to-blue-50 border-blue-200'
-                : 'bg-gradient-to-br from-red-50 to-orange-50 border-orange-200'
-            }`}
-          >
-            <p className={`font-bold mb-2 uppercase tracking-wider text-sm ${result.isFeasible ? 'text-blue-800' : 'text-orange-800'}`}>
-              {result.isFeasible ? 'Target Required' : 'Not Feasible'}
+          <div style={{
+            marginTop: '1.75rem',
+            borderRadius: '16px',
+            padding: '2rem',
+            textAlign: 'center',
+            border: result.isFeasible
+              ? '1px solid rgba(139,92,246,0.25)'
+              : '1px solid rgba(239,68,68,0.25)',
+            background: result.isFeasible
+              ? 'linear-gradient(135deg, rgba(124,58,237,0.12), rgba(45,212,191,0.07))'
+              : 'linear-gradient(135deg, rgba(239,68,68,0.1), rgba(249,115,22,0.08))',
+            position: 'relative',
+            overflow: 'hidden',
+          }}>
+            {/* Top line */}
+            <div style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
+              background: result.isFeasible
+                ? 'linear-gradient(90deg, transparent, rgba(167,139,250,0.5), transparent)'
+                : 'linear-gradient(90deg, transparent, rgba(239,68,68,0.4), transparent)',
+            }} />
+
+            <p style={{
+              fontSize: '0.68rem',
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: result.isFeasible ? '#a78bfa' : '#f87171',
+              marginBottom: '0.75rem',
+            }}>
+              {result.isFeasible ? '✦ Required SGPA' : '✦ Not Feasible'}
             </p>
-            <p className={`text-6xl font-extrabold tracking-tight mb-4 ${result.isFeasible ? 'text-blue-600' : 'text-orange-600'}`}>
+
+            <p style={{
+              fontFamily: "'Syne', sans-serif",
+              fontSize: '4.5rem',
+              fontWeight: 800,
+              letterSpacing: '-0.03em',
+              lineHeight: 1,
+              marginBottom: '1rem',
+              background: result.isFeasible
+                ? 'linear-gradient(135deg, #c4b5fd, #2dd4bf)'
+                : 'linear-gradient(135deg, #f87171, #fb923c)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}>
               {result.requiredSGPA}
             </p>
-            <p className="text-slate-700 font-medium leading-relaxed">
+
+            <p style={{
+              color: '#9d8fbb',
+              fontSize: '0.875rem',
+              lineHeight: 1.65,
+              maxWidth: '380px',
+              margin: '0 auto',
+            }}>
               {result.message}
             </p>
           </div>
