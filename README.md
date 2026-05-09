@@ -7,11 +7,12 @@ A comprehensive MERN stack web application designed to help students manage thei
 ## ✨ Features
 
 ### Core Features
-- **SGPA Calculator** - Calculate semester GPA based on course grades and credits
-- **Grade Improver** - Determine required SGPA to achieve target CGPA
-- **Feedback System** - Submit bug reports and suggestions for platform improvement
-- **Quick Links** - Easy access to important resources like VTOP Portal
-- **Responsive UI** - Fully responsive design that works on all devices
+- **SGPA Calculator** - Calculate your semester GPA instantly
+- **GPA Target Planner** - Plan your required SGPA for your target CGPA
+- **Feedback** - Share your feedback and suggestions
+- **PYQS Archive** - Download previous year question papers
+- **Faculty & Library** - Search faculty cabins and contacts
+- **VTOP Portal** - Official Student Portal
 
 ### Student Management Tools
 - Dynamic course entry with real-time SGPA calculation
