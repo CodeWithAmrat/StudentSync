@@ -1,101 +1,45 @@
 import { useState } from 'react';
 
 export default function FeedbackForm() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    issueType: 'Bug',
-    message: '',
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', issueType: 'Bug', message: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 👇 Here is the validateForm function you were looking for 👇
   const validateForm = () => {
-    // Check Name
-    if (!formData.name.trim()) {
-      setError('Name is required');
-      return false;
-    }
-    
-    // Check Email (Now Compulsory and checks for correct format)
-    if (!formData.email.trim()) {
-      setError('Email is required');
-      return false;
-    }
-    
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      setError('Please enter a valid email address (e.g., student@example.com)');
-      return false;
-    }
-
-    // Check Issue Type
-    if (!formData.issueType) {
-      setError('Issue type is required');
-      return false;
-    }
-
-    // Check Message
-    if (!formData.message.trim()) {
-      setError('Message is required');
-      return false;
-    }
-    if (formData.message.trim().length < 10) {
-      setError('Message must be at least 10 characters long');
-      return false;
-    }
-    
+    if (!formData.name.trim()) { setError('Name is required'); return false; }
+    if (!formData.email.trim()) { setError('Email is required'); return false; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) { setError('Please enter a valid email address'); return false; }
+    if (!formData.issueType) { setError('Issue type is required'); return false; }
+    if (!formData.message.trim()) { setError('Message is required'); return false; }
+    if (formData.message.trim().length < 10) { setError('Message must be at least 10 characters'); return false; }
     return true;
   };
-  // 👆 validateForm ends here 👆
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess(false);
-
-    // Validate form before submitting
-    if (!validateForm()) {
-      return;
-    }
-
+    if (!validateForm()) return;
     setLoading(true);
-
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
     try {
       const response = await fetch(`${API_URL}/api/feedback`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(
-          errorData.error || `Error: ${response.statusText}`
-        );
+        throw new Error(errorData.error || `Error: ${response.statusText}`);
       }
-
       setSuccess(true);
-      setFormData({
-        name: '',
-        email: '', 
-        issueType: 'Bug',
-        message: '',
-      });
-
+      setFormData({ name: '', email: '', issueType: 'Bug', message: '' });
       setTimeout(() => setSuccess(false), 5000);
     } catch (err) {
       setError(err.message || 'Failed to submit feedback. Please try again.');
@@ -104,104 +48,121 @@ export default function FeedbackForm() {
     }
   };
 
+  const inputStyle = {
+    width: '100%',
+    padding: '0.75rem 1rem',
+    borderRadius: '12px',
+    fontSize: '0.9rem',
+  };
+
+  const labelStyle = {
+    display: 'block',
+    fontSize: '0.78rem',
+    fontWeight: 600,
+    color: '#a78bfa',
+    marginBottom: '0.5rem',
+    letterSpacing: '0.03em',
+  };
+
   return (
-    <div id="feedback-section" className="max-w-2xl mx-auto p-6 mt-4 mb-12">
-      <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">
-            Send Us Your Feedback
-          </h2>
-          <p className="text-gray-600">
-            Help us improve StudentSync by sharing your thoughts and suggestions
-          </p>
-        </div>
+    <div id="feedback-section" className="max-w-2xl mx-auto px-4 sm:px-6 mt-8 mb-16">
 
+      {/* Page header */}
+      <div className="mb-6">
+        <p style={{ fontSize: '0.72rem', color: '#a78bfa', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 500, marginBottom: '0.5rem' }}>
+          ✦ Get in touch
+        </p>
+        <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.15, color: '#f8f4ff', marginBottom: '0.4rem' }}>
+          Send Us Feedback
+        </h2>
+        <p style={{ color: '#6b5f87', fontSize: '0.9rem' }}>
+          Help us improve StudentSync by sharing your thoughts and suggestions.
+        </p>
+      </div>
+
+      {/* Card */}
+      <div style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(139,92,246,0.15)', borderRadius: '20px', backdropFilter: 'blur(14px)', padding: '2rem', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, transparent, rgba(167,139,250,0.5), rgba(236,72,153,0.3), transparent)' }} />
+
+        {/* Success banner */}
         {success && (
-          <div className="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded-lg">
-            <p className="text-green-700 font-semibold">
-              ✓ Thank you! Your feedback has been submitted successfully.
-            </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(45,212,191,0.1)', border: '1px solid rgba(45,212,191,0.25)', color: '#2dd4bf', padding: '0.85rem 1rem', borderRadius: '12px', marginBottom: '1.5rem', fontSize: '0.875rem', fontWeight: 600 }}>
+            <span style={{ fontSize: '1.1rem' }}>✓</span>
+            Thank you! Your feedback has been submitted successfully.
           </div>
         )}
 
+        {/* Error banner */}
         {error && (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded-lg">
-            <p className="text-red-700 font-semibold">{error}</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)', color: '#fca5a5', padding: '0.85rem 1rem', borderRadius: '12px', marginBottom: '1.5rem', fontSize: '0.875rem', fontWeight: 500 }}>
+            <span>⚠️</span> {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+
+          {/* Name */}
           <div>
-            <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
-              Name <span className="text-red-500">*</span>
+            <label htmlFor="name" style={labelStyle}>
+              Name <span style={{ color: '#f87171' }}>*</span>
             </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Your name"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            />
+            <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} placeholder="Your name" style={inputStyle} />
           </div>
 
+          {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-              Email <span className="text-red-500">*</span>
+            <label htmlFor="email" style={labelStyle}>
+              Email <span style={{ color: '#f87171' }}>*</span>
             </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="your.email@example.com"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            />
+            <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} placeholder="your.email@example.com" style={inputStyle} />
           </div>
 
+          {/* Issue Type */}
           <div>
-            <label htmlFor="issueType" className="block text-sm font-semibold text-gray-700 mb-2">
-              Issue Type <span className="text-red-500">*</span>
+            <label htmlFor="issueType" style={labelStyle}>
+              Issue Type <span style={{ color: '#f87171' }}>*</span>
             </label>
-            <select
-              id="issueType"
-              name="issueType"
-              value={formData.issueType}
-              onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            >
+            <select id="issueType" name="issueType" value={formData.issueType} onChange={handleChange} style={inputStyle}>
               <option value="Bug">🐛 Bug Report</option>
               <option value="Suggestion">💡 Suggestion</option>
             </select>
           </div>
 
+          {/* Message */}
           <div>
-            <label htmlFor="message" className="block text-sm font-semibold text-gray-700 mb-2">
-              Message <span className="text-red-500">*</span>
+            <label htmlFor="message" style={labelStyle}>
+              Message <span style={{ color: '#f87171' }}>*</span>
             </label>
-            <textarea
-              id="message"
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
+            <textarea id="message" name="message" value={formData.message} onChange={handleChange}
               placeholder="Please describe your feedback in detail..."
               rows="5"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-none"
+              style={{ ...inputStyle, resize: 'none', lineHeight: 1.6 }}
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full py-3 px-6 rounded-lg font-bold text-white transition duration-200 ${
-              loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-            }`}
+          {/* Submit */}
+          <button type="submit" disabled={loading}
+            style={{
+              width: '100%',
+              padding: '0.9rem 1.5rem',
+              borderRadius: '12px',
+              border: 'none',
+              fontWeight: 700,
+              fontSize: '0.95rem',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              transition: 'opacity 0.2s, transform 0.15s',
+              background: loading
+                ? 'rgba(255,255,255,0.06)'
+                : 'linear-gradient(135deg, #7c3aed, #db2777)',
+              color: loading ? '#5a4f72' : 'white',
+              boxShadow: loading ? 'none' : '0 0 24px rgba(139,92,246,0.3)',
+            }}
+            onMouseEnter={e => { if (!loading) { e.currentTarget.style.opacity = '0.88'; e.currentTarget.style.transform = 'translateY(-1px)'; }}}
+            onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'translateY(0)'; }}
           >
-            {loading ? 'Submitting...' : 'Submit Feedback'}
+            {loading ? 'Submitting...' : 'Submit Feedback →'}
           </button>
+
         </form>
       </div>
     </div>
