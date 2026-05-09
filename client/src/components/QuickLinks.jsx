@@ -5,7 +5,7 @@ export default function QuickLinks() {
   const links = [
     {
       title: 'VTOP Portal',
-      description: 'Official Student Portal for Grades & Attendance',
+      description: 'Official Student Portal',
       url: 'https://vtop.vitbhopal.ac.in/vtop/open/page',
       icon: '🎓',
       bgStyle: 'bg-blue-50 hover:bg-blue-100 border-blue-200',
@@ -19,6 +19,15 @@ export default function QuickLinks() {
       icon: '📚',
       bgStyle: 'bg-emerald-50 hover:bg-emerald-100 border-emerald-200',
       textStyle: 'text-emerald-700',
+      isInternalPage: true
+    },
+    {
+      title: 'PYQs Archive',
+      description: 'Download previous year question papers',
+      url: '/pyqs',
+      icon: '📝',
+      bgStyle: 'bg-rose-50 hover:bg-rose-100 border-rose-200',
+      textStyle: 'text-rose-700',
       isInternalPage: true
     },
     {
@@ -57,7 +66,6 @@ export default function QuickLinks() {
         <p className="text-slate-600 mt-3 font-medium">Access your essential university tools and resources in one click.</p>
       </div>
 
-      {/* Grid updated to handle 5 cards nicely */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {links.map((link, index) => {
           

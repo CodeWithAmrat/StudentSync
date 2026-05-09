@@ -7,6 +7,7 @@ import LibraryDirectory from './components/LibraryDirectory'
 import SGPACalculator from './components/SGPACalculator'
 import GradeImprover from './components/GradeImprover'
 import FeedbackForm from './components/FeedbackForm'
+import PYQDirectory from './components/PYQDirectory'
 import './App.css'
 
 // ScrollHandler ensures the page starts at the top when navigating to a new route
@@ -37,7 +38,7 @@ function App() {
       <div className="flex flex-col min-h-screen">
         <Navbar />
         
-        <main className="flex-grow pt-8 pb-12">
+        <main className="grow pt-8 pb-12">
           <Routes>
             {/* Route 1: The Main Homepage (Quick Links & Feedback) */}
             <Route path="/" element={
@@ -48,25 +49,16 @@ function App() {
             } />
 
             {/* Route 2: The Directory Page */}
-            <Route path="/directory" element={
-              <div className="py-8">
-                <LibraryDirectory />
-              </div>
-            } />
+            <Route path="/directory" element={<div className="py-8"><LibraryDirectory /></div>} />
 
-            {/* Route 3: SGPA Calculator Page */}
-            <Route path="/sgpa-calculator" element={
-              <div className="py-8">
-                <SGPACalculator />
-              </div>
-            } />
+            {/* Route 3: The New PYQs Page */}
+            <Route path="/pyqs" element={<div className="py-8"><PYQDirectory /></div>} />
 
-            {/* Route 4: GPA Target Planner Page */}
-            <Route path="/gpa-improver" element={
-              <div className="py-8">
-                <GradeImprover />
-              </div>
-            } />
+            {/* Route 4: SGPA Calculator Page */}
+            <Route path="/sgpa-calculator" element={<div className="py-8"><SGPACalculator /></div>} />
+
+            {/* Route 5: GPA Target Planner Page */}
+            <Route path="/gpa-improver" element={<div className="py-8"><GradeImprover /></div>} />
           </Routes>
         </main>
 
