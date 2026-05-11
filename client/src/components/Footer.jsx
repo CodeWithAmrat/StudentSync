@@ -36,7 +36,7 @@ export default function Footer() {
             className="flex flex-wrap justify-center items-center gap-2 text-sm font-medium"
             style={{ color: '#5a4f72' }}
           >
-            <span>Made with 💻 &amp; ❤️</span>
+            <span>Made with 💻 &amp; ❤️ by <span style={{ color: '#a78bfa', fontWeight: '600' }}>Amrat Gupta</span></span>
             <span style={{ color: '#2a2040' }}>|</span>
 
             <a
